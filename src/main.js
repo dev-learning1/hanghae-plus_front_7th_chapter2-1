@@ -5,6 +5,10 @@ import { routes } from "./routes.js";
 const enableMocking = () =>
   import("./mocks/browser.js").then(({ worker }) =>
     worker.start({
+      serviceWorker: {
+        // 여기
+        url: `${import.meta.env.BASE_URL}mockServiceWorker.js`,
+      },
       onUnhandledRequest: "bypass",
     }),
   );
@@ -12,7 +16,9 @@ const enableMocking = () =>
 function renderPage(isLoading = false) {
   const $root = document.getElementById("root");
   const path = window.location.pathname;
-  const Page = routes[path];
+  const basePath = import.meta.env.BASE_URL; // vite 제공
+  const relativePath = path.replace(basePath, "/").replace(/\/$/, "") || "/";
+  const Page = routes[relativePath];
 
   if (Page) {
     $root.innerHTML = `
