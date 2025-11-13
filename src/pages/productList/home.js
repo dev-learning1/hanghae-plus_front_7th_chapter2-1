@@ -11,7 +11,7 @@ import { createSignal } from "../../store/signal.js";
 
 // Signal 생성: [getter, setter, subscribe]
 const [getLoading, setLoading, subscribeLoading] = createSignal(true);
-const [getProducts, setProducts, subscribeProducts] = createSignal([]);
+export const [getProducts, setProducts, subscribeProducts] = createSignal([]);
 const [getCategories, setCategories, subscribeCategories] = createSignal({});
 const [getSelectedCategory1, setSelectedCategory1] = createSignal(null);
 const [getSelectedCategory2, setSelectedCategory2] = createSignal(null);
@@ -128,7 +128,8 @@ async function loadInitialData() {
   }
 }
 
-export const Home = () => {
+// eslint-disable-next-line no-unused-vars
+export const Home = (_params = {}) => {
   // DOM 마운트 후 데이터 로드
   setTimeout(() => {
     loadInitialData();
