@@ -1,7 +1,5 @@
 export const ProductList = (loading, productList) => {
   const products = productList;
-  console.log("products", products);
-  console.log("loading", loading);
 
   return `
     <div class="grid grid-cols-2 gap-4 mb-6" id="products-grid">
@@ -15,7 +13,6 @@ export const ProductList = (loading, productList) => {
 };
 
 const ProductCard = (product) => {
-  console.log("product", product);
   return `
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden product-card"
                    data-product-id="85067212996">
