@@ -1,15 +1,16 @@
-export const ProductList = (loading, productList) => {
+export const ProductList = (loading, productList, isLoadingMore = false, hasMore = true) => {
   const products = productList;
 
   return `
     <div class="grid grid-cols-2 gap-4 mb-6" id="products-grid">
     ${
-      loading
+      loading && products.length === 0
         ? CardSkeleton() + CardSkeleton() + CardSkeleton() + CardSkeleton()
         : products.map((product) => ProductCard(product)).join("")
     }
     </div>
-    ${loading ? "" : FinishMessage()}
+    ${isLoadingMore ? `<div class="grid grid-cols-2 gap-4 mb-6">${CardSkeleton() + CardSkeleton()}</div>` : ""}
+    ${!loading && !hasMore ? FinishMessage() : ""}
     `;
 };
 

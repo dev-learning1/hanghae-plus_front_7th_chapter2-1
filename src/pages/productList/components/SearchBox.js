@@ -6,10 +6,12 @@ let categoryData = {};
 let onCategoryChange = null; // 카테고리 변경 콜백
 let onLimitChange = null; // limit 변경 콜백
 let onSortChange = null; // sort 변경 콜백
+let onSearchChange = null; // search 변경 콜백
 let selectedCategory1 = null; // 선택된 카테고리1
 let selectedCategory2 = null; // 선택된 카테고리2
 let selectedLimit = 20; // 선택된 limit
 let selectedSort = "price_asc"; // 선택된 sort
+let currentSearch = ""; // 현재 검색어
 let filterEventsAttached = false; // 필터 이벤트 등록 여부
 
 // ------------------------------
@@ -52,22 +54,26 @@ export const SearchBox = (
   onCategoryChangeCallback = null,
   onLimitChangeCallback = null,
   onSortChangeCallback = null,
+  onSearchChangeCallback = null,
   currentLimit = 20,
   currentSort = "price_asc",
   currentCategory1 = null,
   currentCategory2 = null,
+  searchValue = "",
 ) => {
   categoryLoading = loading;
   categoryData = categories; // 이미 객체 형태로 받음
   onCategoryChange = onCategoryChangeCallback;
   onLimitChange = onLimitChangeCallback;
   onSortChange = onSortChangeCallback;
+  onSearchChange = onSearchChangeCallback;
 
   // 현재 선택된 값 업데이트
   selectedLimit = currentLimit;
   selectedSort = currentSort;
   selectedCategory1 = currentCategory1;
   selectedCategory2 = currentCategory2;
+  currentSearch = searchValue;
 
   setTimeout(() => {
     // DOM이 교체된 후 실행되므로 여기서 플래그 리셋
@@ -76,6 +82,7 @@ export const SearchBox = (
     renderCategoryUI(selectedCategory1, selectedCategory2);
     // renderFilterSelect()는 호출하지 않음 - 이미 HTML에 포함되어 있음
     attachFilterEvents();
+    attachSearchEvent();
   }, 0);
 
   return `
@@ -84,6 +91,7 @@ export const SearchBox = (
         <!-- 검색창 -->
         <div class="mb-4 relative">
           <input type="text" id="search-input" placeholder="상품명을 검색해보세요..."
+                 value="${currentSearch}"
                  class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg
                         focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -306,4 +314,28 @@ const attachFilterEvents = () => {
 
   filterEventsAttached = true;
   console.log("Filter events attached successfully");
+};
+
+// ------------------------------
+// 검색 이벤트 연결 (Enter 키 입력 시)
+// ------------------------------
+const attachSearchEvent = () => {
+  const searchInput = document.querySelector("#search-input");
+  if (searchInput) {
+    searchInput.addEventListener("keydown", (e) => {
+      // Enter 키를 눌렀을 때만 검색
+      if (e.key === "Enter") {
+        e.preventDefault(); // 폼 제출 방지
+        const searchText = e.target.value;
+
+        console.log("Search triggered by Enter key:", searchText);
+        if (onSearchChange) {
+          onSearchChange(searchText);
+        }
+      }
+    });
+    console.log("Search event attached (Enter key)");
+  } else {
+    console.warn("search-input element not found!");
+  }
 };
