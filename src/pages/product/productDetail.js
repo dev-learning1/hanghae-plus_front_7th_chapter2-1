@@ -44,7 +44,10 @@ function renderProductDetail() {
             ${
               isLoading
                 ? LoadingInDetail()
-                : Breadcrumb(productData) + Info(productData) + GoToProductList() + RelativeProductList(productData)
+                : Breadcrumb(productData) +
+                  Info(productData) +
+                  GoToProductList(productData) +
+                  RelativeProductList(productData)
             }
         </main>
     `;
